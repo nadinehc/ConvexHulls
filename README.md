@@ -7,3 +7,6 @@
 - [ ] partie 4
 
 **Brainstorming d'idées en plus**
+- points dans [0,1] eu lieu de [-1,1] ? (modifier bornes médiane)
+- graphique du nombre de tour de boucles de find pour calculer la médiane (permet de justifier la complexité linéaire en moyenne)
+- graphique de test pour find line
