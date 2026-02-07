@@ -9,12 +9,12 @@ def datasetA(n: int):
     - Rotate the whole dataset by a random angle.
     - Shuffle the dataset.
     """
-    X = np.random.rand(n-4, 2) * 2 - 1
-    corners = np.array([[-1, -1], [1, -1], [-1, 1], [1, 1]])
+    X = np.random.rand(n-4, 2)
+    corners = np.array([[0, 0], [1, 0], [0, 1], [1, 1]])
     X = np.vstack([X, corners])
     angle = np.random.rand() * (2 * np.pi)
     rotation_matrix = np.array([[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]])
-    X = X @ rotation_matrix.T
+    X = (X - 0.5) @ rotation_matrix.T + 0.5
     indices = np.random.permutation(n)
     X = X[indices]
     return X
@@ -23,24 +23,27 @@ def datasetB(n: int):
     """
     Generates n samples randomly distributed in the unit square.
     """
-    X = np.random.rand(n, 2) * 2 - 1
+    X = np.random.rand(n, 2)
     return X 
 
 def datasetC(n: int):
     """
-    Generates n samples randomly distributed in the unit disk.
+    Generates n samples randomly distributed in the disk 
+    centered at (1/2, 1/2) with radius 1/2.
     """
-    r = np.sqrt(np.random.rand(n))
+    r = np.sqrt(np.random.rand(n)) / 2
     theta = np.random.rand(n) * (2 * np.pi)
     X = np.column_stack([r * np.cos(theta), r * np.sin(theta)])
+    X += 0.5  # Shift the center to (0.5, 0.5)
     return X
 
 def datasetD(n: int):
     """
-    Generates dataset D with n samples distributed in a circular pattern.
+    Generates dataset D with n samples distributed on the circle centered at (1/2, 1/2) with radius 1/2.
     """
     theta = np.random.rand(n) * (2 * np.pi)
-    X = np.column_stack([np.cos(theta), np.sin(theta)])
+    X = np.column_stack([0.5 * np.cos(theta), 0.5 * np.sin(theta)])
+    X += 0.5  # Shift the center to (0.5, 0.5)
     return X
 
 def visualize_dataset():
@@ -50,14 +53,14 @@ def visualize_dataset():
     fig, ax = plt.subplots()
     plt.subplots_adjust(left=0.3)
 
-    square_x = [-1, 1, 1, -1, -1]
-    square_y = [-1, -1, 1, 1, -1]
+    square_x = [0, 1, 1, 0, 0]
+    square_y = [0, 0, 1, 1, 0]
 
     # Circle
     theta = np.linspace(0, 2*np.pi, 400)
 
-    x = np.cos(theta)
-    y = np.sin(theta)
+    x = 0.5 * np.cos(theta) + 0.5
+    y = 0.5 * np.sin(theta) + 0.5
 
     datasets = {
         "A": datasetA,
