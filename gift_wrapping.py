@@ -1,5 +1,5 @@
 import numpy as np
-from sweeping import is_clockwise
+from utils import is_clockwise
 
 def gift_wrapping_algorithm(points: np.ndarray) -> np.ndarray:
     """Implement the gift wrapping algorithm (also known as Jarvis March)

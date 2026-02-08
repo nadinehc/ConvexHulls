@@ -1,8 +1,8 @@
 from sweeping import generate_video, sweeping_algorithm
 from gift_wrapping import gift_wrapping_algorithm
 from utils import visualize_hull
-from test_sweeping import test_sweeping_algorithm_datasetA, test_sweeping_algorithm_datasetD
 from output_sensitive import output_sensitive_hull
+from quick_hull import quick_hull
 
 
 if __name__ == "__main__":
@@ -14,5 +14,5 @@ if __name__ == "__main__":
     # test_sweeping_algorithm_datasetD()
 
     
-    visualize_hull(100, "D", output_sensitive_hull)
+    visualize_hull(100, quick_hull, dataset="B")
 

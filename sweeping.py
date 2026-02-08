@@ -1,25 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from utils import is_clockwise
 
 from datasets import datasetA, datasetB, datasetC, datasetD
-
-def is_clockwise(A, B, C) -> bool:
-    """
-    Check if the points A, B, C are in clockwise order.
-    """
-    AB = B - A
-    AC = C - A
-    if A[0] != B[0]:
-        # cross product
-        return AB[0] * AC[1] - AB[1] * AC[0] < 0
-    else:
-        if A[1] < B[1]:
-            return AC[0] > 0
-        elif A[1] > B[1]:
-            return AC[0] < 0
-        else:
-            return False  # A and B are the same point
 
 def sweeping_algorithm(points: np.ndarray, return_all_steps=False) -> np.ndarray:
     """Implement the sweeping algorithm

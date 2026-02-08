@@ -1,8 +1,24 @@
-from sweeping import sweeping_algorithm
 import matplotlib.pyplot as plt
 from datasets import datasetA, datasetB, datasetC, datasetD
 
-def visualize_hull(n, dataset="A", algorithm=sweeping_algorithm):
+def is_clockwise(A, B, C) -> bool:
+    """
+    Check if the points A, B, C are in clockwise order.
+    """
+    AB = B - A
+    AC = C - A
+    if A[0] != B[0]:
+        # cross product
+        return AB[0] * AC[1] - AB[1] * AC[0] < 0
+    else:
+        if A[1] < B[1]:
+            return AC[0] > 0
+        elif A[1] > B[1]:
+            return AC[0] < 0
+        else:
+            return False  # A and B are the same point
+
+def visualize_hull(n, algorithm, dataset="A"):
     """
     visualizes the convex hull for one of the datasets A, B, C, D
 

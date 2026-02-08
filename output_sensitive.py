@@ -1,7 +1,6 @@
 import numpy as np
 import random as rd
 
-
 def median(points: list):
     '''
     Finds the point with the mediane x-coodinate
@@ -13,8 +12,8 @@ def median(points: list):
         (list): median point
     '''
     n = len(points)
-    m = n//2 + 1 
-    return(find(points,m,0,1))
+    m = (n+1)//2
+    return(find(points,m,min([p[0] for p in points]),max([p[0] for p in points])))
 
 
 def find(points: list, k: int, a: float, b: float):
@@ -30,7 +29,10 @@ def find(points: list, k: int, a: float, b: float):
     Returns: 
         (list): kth leftmost point
     '''
-    pivot = a+(b-a)*(k/len(points))   
+    if len(points) == 1:
+        return points[0]
+
+    pivot = a+(b-a)*(k/len(points)) 
 
     nb_point_left = 0           
     closest_left = [a-1,0]      
@@ -38,27 +40,27 @@ def find(points: list, k: int, a: float, b: float):
     left_points = []            
     right_points = []           
 
-    for point in points :
-        if point[0]<pivot :
+    for point in points:
+        if point[0]<pivot:
             nb_point_left += 1
             left_points.append(point)
-            if point[0] > closest_left[0] :
+            if point[0] > closest_left[0]:
                 closest_left = point
         
         else :
             right_points.append(point)
-            if point[0] < closest_right[0] :
+            if point[0] < closest_right[0]:
                 closest_right = point
 
-    #cases where all points are on the same side of the pivot
+    # cases where all points are on the same side of the pivot
     if closest_left == [a-1,0] :
         closest_left = min(points)
     if closest_right == [b+1,0] :
         closest_right = max(points)
 
-    if nb_point_left == k :
+    if nb_point_left == k:
         return (closest_left)
-    elif nb_point_left>k :
+    elif nb_point_left>k:
         return (find(left_points, k, a, closest_left[0]))
     else :
         return(find(right_points,k-nb_point_left,closest_right[0],b))
@@ -66,7 +68,8 @@ def find(points: list, k: int, a: float, b: float):
     
 def line (p1: list,p2: list,p: list):
     '''
-    Returns the value of the ordinate of the line defined by points p1 and p2, calculated at the x-coordinate of point p.
+    Returns the value of the ordinate of the line defined by points p1 and p2, 
+    calculated at the x-coordinate of point p.
     '''
     if p2[0] == p1[0]:
         return float('-inf')
