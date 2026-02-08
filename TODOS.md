@@ -10,7 +10,7 @@ Nadine :
 - [ ] autre algo
 
 Elsa : 
-- [ ]fixer un truc dans la fonction médiane
+- [x] fixer le pivot dans la fonction médiane
 - [ ] graphiques de comparaison des performances
 - [ ] partie 4
 Tu peux utiliser la fonction `visualize_hull` dans `utils.py` pour représenter le polygone et le dataset
