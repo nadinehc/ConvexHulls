@@ -33,8 +33,7 @@ def sweeping_algorithm(points: np.ndarray, return_all_steps=False) -> np.ndarray
         all_steps.append(np.array(convex_hull))
 
     # upper hull
-    i = 2
-    while convex_hull[-1][0] != sorted_points[-1][0] and convex_hull[-1][1] != sorted_points[-1][1]:
+    for i in range(2, len(sorted_points)):
         while len(convex_hull) > 1 and is_clockwise(convex_hull[-1], convex_hull[-2], sorted_points[i]):
             convex_hull.pop(-1)
 
@@ -43,16 +42,13 @@ def sweeping_algorithm(points: np.ndarray, return_all_steps=False) -> np.ndarray
         if return_all_steps:
             all_steps.append(np.array(convex_hull))
 
-        i += 1
-
     # lower hull
-    i = len(sorted_points) - 3
     convex_hull.append(sorted_points[-2])
     
     if return_all_steps:
         all_steps.append(np.array(convex_hull))
 
-    while convex_hull[-1][0] != sorted_points[0][0] and convex_hull[-1][1] != sorted_points[0][1]:
+    for i in range(len(sorted_points) - 3, -1, -1):
         while len(convex_hull) > 1 and is_clockwise(convex_hull[-1], convex_hull[-2], sorted_points[i]):
             convex_hull.pop(-1)
 
@@ -60,8 +56,6 @@ def sweeping_algorithm(points: np.ndarray, return_all_steps=False) -> np.ndarray
 
         if return_all_steps:
             all_steps.append(np.array(convex_hull))
-
-        i -= 1
 
     if return_all_steps:
         return all_steps

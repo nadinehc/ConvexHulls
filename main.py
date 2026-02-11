@@ -14,5 +14,5 @@ if __name__ == "__main__":
     # test_sweeping_algorithm_datasetD()
 
     
-    visualize_hull(100, quick_hull, dataset="B")
+    visualize_hull(100, sweeping_algorithm, dataset="B")
 
