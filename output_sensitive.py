@@ -13,7 +13,9 @@ def median(points: list):
     '''
     n = len(points)
     m = (n+1)//2
-    return(find(points,m,min([p[0] for p in points]),max([p[0] for p in points])))
+    #return(find(points,m,min([p[0] for p in points]),max([p[0] for p in points])))
+    return(find(points,m,0,1))
+
 
 
 def find(points: list, k: int, a: float, b: float):
@@ -201,7 +203,7 @@ def lower_hull (points: list) :
     return hull
     
 
-def output_sensitive_hull (points: np.ndarray):
+def output_sensitive_algorithm (points: np.ndarray):
     '''
     Finds the points that make up the convex hull using the output sensitive algorithme
     
