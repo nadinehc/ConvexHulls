@@ -11,16 +11,18 @@ Nadine :
 
 Elsa : 
 - [x] fixer le pivot dans la fonction médiane
-- [ ] graphiques de comparaison des performances
-- [ ] partie 4
+- [x] partie 4
+- [x] graphiques de comparaison des performances (ajouter optionnellemnt gift_wraping et quick_hull)
+- [ ] rajouter la complexité théorique
+- [ ] graphique évolution appels récursifs en fonction du nombre de points
+- [x] graphique du nombre de tour de boucles de find pour calculer la médiane (permet de justifier la complexité linéaire en moyenne)
 Tu peux utiliser la fonction `visualize_hull` dans `utils.py` pour représenter le polygone et le dataset
 
 - [ ] README
 
 **Brainstorming d'idées en plus**
-- points dans [0,1] eu lieu de [-1,1] ? (modifier bornes médiane)
-- graphique du nombre de tour de boucles de find pour calculer la médiane (permet de justifier la complexité linéaire en moyenne)
-- graphique de test pour find line
+- changer le nom de output sensitive -> done
+- gif pour kirkpatrick ?
 
 
 

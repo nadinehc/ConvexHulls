@@ -1,10 +1,10 @@
 from sweeping import generate_video, sweeping_algorithm
 from gift_wrapping import gift_wrapping_algorithm
 from utils import visualize_hull
-from output_sensitive import output_sensitive_algorithm
-from comparison import execution_time_comparison, hull_comparison
-from quick_hull import quick_hull
-from tests import nb_loop_graph
+from kirkpatrick_seidel import kirkpatrick_seidel_algorithm
+from comparison import execution_time_comparison, hull_comparison, nb_recursive_call_graph
+from quick_hull import quick_hull_algorithm
+
 
 
 if __name__ == "__main__":
@@ -15,9 +15,11 @@ if __name__ == "__main__":
     # test_sweeping_algorithm_datasetA()
     # test_sweeping_algorithm_datasetD()
 
-    #execution_time_comparison("A") #peut prendre du temps
+    execution_time_comparison("B", gift_wrapping=True, quick_hull=True ) #peut prendre du temps
     
-    nb_loop_graph(10000, nb_runs=100, dataset="D")
+    nb_recursive_call_graph(10000, nb_runs=100, dataset="B")
+
+    hull_comparison(50, "B")
     
     #visualize_hull(100, sweeping_algorithm, dataset="B")
 

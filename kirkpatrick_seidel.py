@@ -7,18 +7,19 @@ def median(points: list, test_mode = False):
     Finds the point with the mediane x-coodinate
     
     Args: 
-        points(list): set of points in the 2D plane
+        points (list): set of points in the 2D plane
+        test_mode (bool): when test_mode is set at True, the function returns the number of recursive calls of the find function
 
     Returns: 
         (list): median point
     '''
     n = len(points)
     m = (n+1)//2
-    return(find(points,m,min([p[0] for p in points]),max([p[0] for p in points]), test_mode, nb_loop = 0))
+    return(find(points,m,min([p[0] for p in points]),max([p[0] for p in points]), test_mode, nb_call = 0))
 
 
 
-def find(points: list, k: int, a: float, b: float, test_mode: bool, nb_loop = 0):
+def find(points: list, k: int, a: float, b: float, test_mode: bool, nb_call = 0):
     '''
     Finds the kth leftmost point from the list 'points', whose x-coordinate is in [a,b]
 
@@ -27,15 +28,17 @@ def find(points: list, k: int, a: float, b: float, test_mode: bool, nb_loop = 0)
         k (int)
         a (float): lower limit of the x coodinate
         b (float): upper limit of the x coordinate
+        test_mode (bool): when test_mode is set as True, the function returns the number of recursive calls
+        nb_call (int): number of recursive calls
 
     Returns: 
         (list): kth leftmost point
     '''
-    nb_loop = nb_loop + 1
+    nb_call = nb_call + 1
 
     if len(points) == 1:
         if test_mode:
-            return nb_loop
+            return nb_call
         return points[0]
 
     pivot = a+(b-a)*(k/len(points)) 
@@ -59,19 +62,19 @@ def find(points: list, k: int, a: float, b: float, test_mode: bool, nb_loop = 0)
                 closest_right = point
 
     # cases where all points are on the same side of the pivot
-    if closest_left == [a-1,0] :
+    if closest_left == [a-1,0]:
         closest_left = min(points)
-    if closest_right == [b+1,0] :
+    if closest_right == [b+1,0]:
         closest_right = max(points)
 
     if nb_point_left == k:
         if test_mode:
-            return nb_loop
+            return nb_call
         return (closest_left)
     elif nb_point_left>k:
-        return (find(left_points, k, a, closest_left[0], test_mode, nb_loop = nb_loop))
+        return (find(left_points, k, a, closest_left[0], test_mode, nb_call = nb_call))
     else :
-        return(find(right_points,k-nb_point_left,closest_right[0],b, test_mode, nb_loop = nb_loop))
+        return(find(right_points,k-nb_point_left,closest_right[0],b, test_mode, nb_call = nb_call))
 
     
 def line (p1: list,p2: list,p: list):
@@ -102,12 +105,12 @@ def find_line(points: list, m: list):
     
     # finding the first basis
     k = 0
-    while points[k][0] >= xm :   
+    while points[k][0] >= xm:   
         k+=1
     p1 = points[k]
 
     k = 0
-    while points[k][0] < xm :
+    while points[k][0] < xm:
         k+=1
     p2 = points[k]
 
@@ -136,17 +139,17 @@ def find_line(points: list, m: list):
 
 
 
-def upper_hull (points: list) :
+def upper_hull (points: list):
     '''
     Finds the points that make up the upper part of the convex hull
     
     Args: 
-        points(list): set of points in the 2D plane
+        points (list): set of points in the 2D plane
 
     Returns: 
         (list): list of the points that make up the upper part of the convex hull, sorted from left to right 
     '''
-    if len(points) < 2 :
+    if len(points) < 2:
         return points
     if len(points) == 2 :
         if points[0][0]<= points[1][0]:
@@ -158,34 +161,34 @@ def upper_hull (points: list) :
     p1,p2 = find_line (points, m)
     right_points = []
     left_points = []
-    for point in points :
-        if point[0] <= p1[0] : 
+    for point in points:
+        if point[0] <= p1[0]: 
             left_points.append(point) 
-        elif point[0] >= p2[0] :
+        elif point[0] >= p2[0]:
             right_points.append(point)
 
     left_hull = upper_hull(left_points)
     right_hull = upper_hull(right_points)
 
-    if len(left_hull) >=1 and left_hull[-1][0] == p1[0] :
+    if len(left_hull) >=1 and left_hull[-1][0] == p1[0]:
         left_hull = left_hull[:-1]
 
-    if len(right_hull) >=1 and right_hull[0][0] == p2[0] :
+    if len(right_hull) >=1 and right_hull[0][0] == p2[0]:
         right_hull = right_hull[1:]
     
     hull = left_hull + [p1,p2] + right_hull
     return hull
 
 
-def inversion (points: list) :
+def inversion (points: list):
     '''
     Applies a symetrie with respect to the axis y=0.5 to each point of 'points'
     
     Args: 
-        points(list): set of points in the 2D plane
+        points (list): set of points in the 2D plane
 
     Returns: 
-        points(list): symetrical set of points in the 2D plane
+        points (list): symetrical set of points in the 2D plane
     '''
     inverted_points = [p.copy() for p in points]
     for k in range (len(inverted_points)):
@@ -193,12 +196,12 @@ def inversion (points: list) :
     return inverted_points
 
 
-def lower_hull (points: list) :
+def lower_hull (points: list):
     '''
     Finds the points that make up the lower part of the convex hull
     
     Args: 
-        points(list): set of points in the 2D plane
+        points (list): set of points in the 2D plane
 
     Returns: 
         (list): list of the points that make up the lower part of the convex hull, sorted from left to right 
@@ -209,12 +212,12 @@ def lower_hull (points: list) :
     return hull
     
 
-def output_sensitive_algorithm (points: np.ndarray):
+def kirkpatrick_seidel_algorithm (points: np.ndarray):
     '''
-    Finds the points that make up the convex hull using the output sensitive algorithme
+    Finds the points that make up the convex hull using the Kirkpatrick Seidel sensitive algorithme
     
     Args: 
-        points(np.ndarray): set of points in the 2D plane
+        points (np.ndarray): set of points in the 2D plane
 
     Returns: 
         (np.ndarray): set of the points that make up the convex hull, in counter clockwise order
@@ -226,7 +229,6 @@ def output_sensitive_algorithm (points: np.ndarray):
 
     lower = lower_hull(P)  
     lower = lower[1:]
-    #lower = lower[1:-1]
 
     convex_hull = upper + lower
     convex_hull = np.array(convex_hull)

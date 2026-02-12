@@ -30,7 +30,7 @@ def distance_to_line(P, A, B):
     AB = B - A
     return abs(AB[0] * AP[1] - AB[1] * AP[0]) / np.linalg.norm(AB)
 
-def quick_hull(points):
+def quick_hull_algorithm(points):
     # find point with minimum and maximum x coordinate
     p_left = points[0]
     p_right = points[0]
