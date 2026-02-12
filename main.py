@@ -4,6 +4,7 @@ from utils import visualize_hull
 from output_sensitive import output_sensitive_algorithm
 from comparison import execution_time_comparison, hull_comparison
 from quick_hull import quick_hull
+from tests import nb_loop_graph
 
 
 if __name__ == "__main__":
@@ -14,7 +15,9 @@ if __name__ == "__main__":
     # test_sweeping_algorithm_datasetA()
     # test_sweeping_algorithm_datasetD()
 
-    execution_time_comparison("A") #peut prendre du temps
+    #execution_time_comparison("A") #peut prendre du temps
+    
+    nb_loop_graph(10000, nb_runs=100, dataset="D")
     
     #visualize_hull(100, sweeping_algorithm, dataset="B")
 

@@ -1,7 +1,8 @@
 import numpy as np
 import random as rd
 
-def median(points: list):
+
+def median(points: list, test_mode = False):
     '''
     Finds the point with the mediane x-coodinate
     
@@ -13,12 +14,11 @@ def median(points: list):
     '''
     n = len(points)
     m = (n+1)//2
-    #return(find(points,m,min([p[0] for p in points]),max([p[0] for p in points])))
-    return(find(points,m,0,1))
+    return(find(points,m,min([p[0] for p in points]),max([p[0] for p in points]), test_mode, nb_loop = 0))
 
 
 
-def find(points: list, k: int, a: float, b: float):
+def find(points: list, k: int, a: float, b: float, test_mode: bool, nb_loop = 0):
     '''
     Finds the kth leftmost point from the list 'points', whose x-coordinate is in [a,b]
 
@@ -31,7 +31,11 @@ def find(points: list, k: int, a: float, b: float):
     Returns: 
         (list): kth leftmost point
     '''
+    nb_loop = nb_loop + 1
+
     if len(points) == 1:
+        if test_mode:
+            return nb_loop
         return points[0]
 
     pivot = a+(b-a)*(k/len(points)) 
@@ -61,11 +65,13 @@ def find(points: list, k: int, a: float, b: float):
         closest_right = max(points)
 
     if nb_point_left == k:
+        if test_mode:
+            return nb_loop
         return (closest_left)
     elif nb_point_left>k:
-        return (find(left_points, k, a, closest_left[0]))
+        return (find(left_points, k, a, closest_left[0], test_mode, nb_loop = nb_loop))
     else :
-        return(find(right_points,k-nb_point_left,closest_right[0],b))
+        return(find(right_points,k-nb_point_left,closest_right[0],b, test_mode, nb_loop = nb_loop))
 
     
 def line (p1: list,p2: list,p: list):
