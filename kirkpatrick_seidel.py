@@ -180,6 +180,49 @@ def upper_hull (points: list):
     return hull
 
 
+
+def uppper_hull (points: list):
+    '''
+    Finds the points that make up the upper part of the convex hull
+    
+    Args: 
+        points (list): set of points in the 2D plane
+
+    Returns: 
+        (list): list of the points that make up the upper part of the convex hull, sorted from left to right 
+    '''
+    if len(points) < 2:
+        return points
+    if len(points) == 2 :
+        if points[0][0]<= points[1][0]:
+            return points
+        else :
+            return [points[1],points[0]]
+    
+    m = median(points)
+    right_points = []
+    left_points = []
+    for point in points:
+        if point[0] < m[0]: 
+            left_points.append(point) 
+        elif point[0] >= m[0]:
+            right_points.append(point)
+
+    left_hull = upper_hull(left_points)
+    right_hull = upper_hull(right_points)
+
+    hull = left_hull + right_hull
+
+    p1, p2 = find_line(hull, m)
+
+    k1 = left_hull.index(p1)
+    k2 = right_hull.index(p2)
+
+    hull = left_hull[:k1+1] + right_hull[k2:]
+
+    return hull
+
+
 def inversion (points: list):
     '''
     Applies a symetrie with respect to the axis y=0.5 to each point of 'points'
