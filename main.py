@@ -11,7 +11,7 @@ from image import image
 if __name__ == "__main__":
     ###################################################################
     ###################### Dataset visualization ######################
-    ####################################################################
+    ###################################################################
 
     # visualize_dataset()
 
@@ -37,7 +37,12 @@ if __name__ == "__main__":
     ###################### Execution time comparison ##################
     ###################################################################
 
-    execution_time_comparison("C", gift_wrapping=True, quick_hull=True)
+    # execution_time_comparison("C", gift_wrapping=True, quick_hull=True)
+    
+
+    ###################################################################
+    ###################### Recursive calls in the median function #####
+    ###################################################################
     
     # nb_recursive_call_graph1(10000, nb_runs=100, dataset="B")
     # nb_recursive_call_graph2()
