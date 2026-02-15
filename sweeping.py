@@ -61,7 +61,7 @@ def sweeping_algorithm(points: np.ndarray, return_all_steps=False) -> np.ndarray
         return all_steps
     return np.array(convex_hull)
 
-def generate_video(n, dataset="A"):
+def generate_video_sweeping(n, dataset="A", filename="convex_hull.gif"):
     """
     Generates a video of the sweeping algorithm in action.
 

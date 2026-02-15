@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 from datasets import datasetA, datasetB, datasetC, datasetD
+import numpy as np
+from kirkpatrick_seidel import median
 
 def is_clockwise(A, B, C) -> bool:
     """
@@ -42,4 +44,46 @@ def visualize_hull(n, algorithm, dataset="A"):
 
     hull = algorithm(points)
     ax.plot(hull[:, 0], hull[:, 1], color='red')
+    plt.show()
+
+def nb_loop_median(nb_points, nb_runs, dataset, max_iter=50):
+    
+    freq = np.zeros(max_iter)
+    
+    dataset_map = {
+        "A": datasetA,  
+        "B": datasetB,  
+        "C": datasetC,  
+        "D": datasetD,  
+    } 
+    
+    if dataset not in dataset_map:
+        raise ValueError(f"Invalid dataset '{dataset}'. Choose from 'A', 'B', 'C', 'D'.")
+
+    for _ in range(nb_runs):
+        points = dataset_map[dataset](nb_points)
+        points = [p.tolist() for p in points]
+        k = median(points, test_mode = True)
+        freq[k] += 1
+
+    freq = freq / nb_runs
+    iterations = np.arange(max_iter)
+
+    return iterations, freq
+
+
+def nb_loop_graph(nb_points, nb_runs=100, dataset="B"):
+    iterations, freq = nb_loop_median(nb_points, nb_runs, dataset)
+
+    plt.figure(figsize=(8, 4))
+
+    plt.bar(iterations,freq,alpha=0.8)
+
+    plt.xlabel("Nombre d'itérations de la boucle")
+    plt.ylabel("Fréquence")
+    plt.title(f"Distribution du nombre d'itérations (N = {nb_points})")
+    plt.xlim(0, 10)
+    plt.xticks(np.arange(1, 10))
+    plt.grid(axis="y", linestyle="--", alpha=0.6)
+    plt.tight_layout()
     plt.show()

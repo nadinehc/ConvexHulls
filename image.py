@@ -37,7 +37,9 @@ def image():
     ax.scatter(left_points[:, 0], left_points[:, 1], color='blue')
     ax.scatter(right_points[:, 0], right_points[:, 1], color='green')
     ax.scatter(others[:, 0], others[:, 1], color='orange')
-
+    ax.scatter(m[0], m[1], color='red')
+    ax.axvline(x=p1[0], color='blue', linestyle='--')
+    ax.axvline(x=p2[0], color='green', linestyle='--')
 
     hull = [p1,p2]
     hull = np.array(hull)

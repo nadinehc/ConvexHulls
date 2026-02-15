@@ -1,5 +1,6 @@
 import numpy as np
 import random as rd
+from matplotlib import pyplot as plt
 
 
 def median(points: list, test_mode = False):
@@ -64,6 +65,7 @@ def find(points: list, k: int, a: float, b: float, test_mode: bool, nb_call = 0)
     # cases where all points are on the same side of the pivot
     if closest_left == [a-1,0]:
         closest_left = min(points)
+
     if closest_right == [b+1,0]:
         closest_right = max(points)
 
@@ -139,7 +141,7 @@ def find_line(points: list, m: list):
 
 
 
-def upper_hull (points: list):
+def upper_hull (points: list, steps = None, prev=None):
     '''
     Finds the points that make up the upper part of the convex hull
     
@@ -150,15 +152,22 @@ def upper_hull (points: list):
         (list): list of the points that make up the upper part of the convex hull, sorted from left to right 
     '''
     if len(points) < 2:
+        if steps:
+            steps.append([prev, points[0]])
         return points
     if len(points) == 2 :
         if points[0][0]<= points[1][0]:
+            if steps:
+                steps.append(points)
             return points
         else :
+            if steps:
+                steps.append([points[1],points[0]])
             return [points[1],points[0]]
     
     m = median(points)
-    p1,p2 = find_line (points, m)
+    p1,p2 = find_line(points, m)
+    steps.append([p1,p2]) if steps is not None else None
     right_points = []
     left_points = []
     for point in points:
@@ -167,8 +176,8 @@ def upper_hull (points: list):
         elif point[0] >= p2[0]:
             right_points.append(point)
 
-    left_hull = upper_hull(left_points)
-    right_hull = upper_hull(right_points)
+    left_hull = upper_hull(left_points, steps=steps, prev=p1)
+    right_hull = upper_hull(right_points, steps=steps, prev=p2)
 
     if len(left_hull) >=1 and left_hull[-1][0] == p1[0]:
         left_hull = left_hull[:-1]
@@ -177,49 +186,6 @@ def upper_hull (points: list):
         right_hull = right_hull[1:]
     
     hull = left_hull + [p1,p2] + right_hull
-    return hull
-
-
-
-def uppper_hull (points: list):
-    '''
-    Finds the points that make up the upper part of the convex hull
-    
-    Args: 
-        points (list): set of points in the 2D plane
-
-    Returns: 
-        (list): list of the points that make up the upper part of the convex hull, sorted from left to right 
-    '''
-    if len(points) < 2:
-        return points
-    if len(points) == 2 :
-        if points[0][0]<= points[1][0]:
-            return points
-        else :
-            return [points[1],points[0]]
-    
-    m = median(points)
-    right_points = []
-    left_points = []
-    for point in points:
-        if point[0] < m[0]: 
-            left_points.append(point) 
-        elif point[0] >= m[0]:
-            right_points.append(point)
-
-    left_hull = upper_hull(left_points)
-    right_hull = upper_hull(right_points)
-
-    hull = left_hull + right_hull
-
-    p1, p2 = find_line(hull, m)
-
-    k1 = left_hull.index(p1)
-    k2 = right_hull.index(p2)
-
-    hull = left_hull[:k1+1] + right_hull[k2:]
-
     return hull
 
 
@@ -239,7 +205,7 @@ def inversion (points: list):
     return inverted_points
 
 
-def lower_hull (points: list):
+def lower_hull (points: list, steps = None):
     '''
     Finds the points that make up the lower part of the convex hull
     
@@ -250,12 +216,15 @@ def lower_hull (points: list):
         (list): list of the points that make up the lower part of the convex hull, sorted from left to right 
     '''
     inverted_points = inversion(points)
-    hull = upper_hull(inverted_points)
+    lower_steps = [] if steps is not None else None
+    hull = upper_hull(inverted_points, steps=lower_steps if steps is not None else None)
+    print([inversion(line) for line in lower_steps]) if steps is not None else None
+    steps = steps + [inversion(line) for line in lower_steps] if steps is not None else None
     hull = inversion(hull)
     return hull
     
 
-def kirkpatrick_seidel_algorithm (points: np.ndarray):
+def kirkpatrick_seidel_algorithm (points: np.ndarray, visualize = False):
     '''
     Finds the points that make up the convex hull using the Kirkpatrick Seidel sensitive algorithme
     
@@ -265,15 +234,50 @@ def kirkpatrick_seidel_algorithm (points: np.ndarray):
     Returns: 
         (np.ndarray): set of the points that make up the convex hull, in counter clockwise order
     '''
+    if visualize:
+        steps = []
     P = [point.tolist() for point in points]
 
-    upper = upper_hull(P)
+    upper = upper_hull(P, steps=steps if visualize else None)
     upper.reverse()
 
-    lower = lower_hull(P)  
+    lower = lower_hull(P, steps=steps if visualize else None)  
     lower = lower[1:]
 
     convex_hull = upper + lower
     convex_hull = np.array(convex_hull)
+
+    if visualize:
+        n = len(steps)
+        # Determine grid size
+        cols = int(np.ceil(np.sqrt(n)))
+        rows = int(np.ceil(n / cols))
+        
+        _, axes = plt.subplots(rows, cols, figsize=(cols*4, rows*4))
+        axes = np.atleast_1d(axes).flatten()
+    
+
+        history = []
+
+        for i, step in enumerate(steps):
+            ax = axes[i]
+            ax.set_aspect("equal")
+            ax.set_title(f"Step {i+1}")
+            
+            ax.scatter(points[:, 0], points[:, 1], color='blue', s=10)
+            
+            p1, p2 = step[0], step[1]
+            history.append(([p1[0], p2[0]], [p1[1], p2[1]]))
+            
+            for h_x, h_y in history:
+                ax.plot(h_x, h_y, 'r-' if i == len(steps)-1 else 'r--')
+
+        # Hide unused subplots
+        for j in range(i + 2, len(axes)):
+            axes[j].axis('off')
+
+        plt.tight_layout()
+
+        plt.show()
 
     return(convex_hull)

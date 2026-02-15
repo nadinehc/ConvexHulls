@@ -46,7 +46,7 @@ def datasetD(n: int):
     X += 0.5  # Shift the center to (0.5, 0.5)
     return X
 
-def visualize_dataset():
+def visualize_dataset(n=100):
     """
     Visualizes the dataset using a scatter plot.
     """
@@ -74,7 +74,7 @@ def visualize_dataset():
 
     def update(label):
         ax.clear()
-        X = datasets[label](50)
+        X = datasets[label](n)
         ax.scatter(X[:,0], X[:,1], s=5)
         ax.plot(x, y, linewidth=1, linestyle='--', color='gray')
         ax.plot(square_x, square_y, linewidth=1, linestyle='--', color='gray')

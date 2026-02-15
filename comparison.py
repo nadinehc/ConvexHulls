@@ -10,7 +10,6 @@ from quick_hull import quick_hull_algorithm
 
 
 def execution_time(algorithm, points):
-    
     start = time.process_time()
     h = len(algorithm(points)) - 1
     end = time.process_time()
@@ -87,6 +86,7 @@ def execution_time_comparison(dataset = "B", gift_wrapping = False, quick_hull =
     plt.legend()
     plt.title("Execution Time Comparison (Dataset "+ dataset+ ")")
     plt.tight_layout()
+    plt.savefig("results/all_time_comparison_"+dataset+".png")
     plt.show()
 
 

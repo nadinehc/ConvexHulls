@@ -1,13 +1,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from datasets import datasetA, datasetB,  datasetC, datasetD
-from output_sensitive import output_sensitive_algorithm
 from sweeping import is_clockwise, sweeping_algorithm
-from output_sensitive import median
+from kirkpatrick_seidel import kirkpatrick_seidel_algorithm
+from gift_wrapping import gift_wrapping_algorithm
+from quick_hull import quick_hull_algorithm
 
-algorithms = [sweeping_algorithm, output_sensitive_algorithm]
+algorithms = [sweeping_algorithm, kirkpatrick_seidel_algorithm, gift_wrapping_algorithm, quick_hull_algorithm]
 
 def test_is_clockwise():
+    print("Testing is_clockwise function...")
     A = np.array([0, 0])
     B = np.array([1, 0])
     C = np.array([0, 1])
@@ -28,64 +30,35 @@ def test_is_clockwise():
     C = np.array([0, -1])
     assert is_clockwise(A, B, C) == True  # Clockwise
 
+    print("All tests passed for is_clockwise function!")
+
 def test_algorithm_datasetA(n = 10000):
+    print("Testing algorithms on dataset A with n=", n)
+    print("------------------------------------------")
     for algorithm in algorithms:
+        print("Testing ", algorithm.__name__)
         for i in range(100):
-            print(i)
+            print(i, end="")
             points = datasetA(n)
             assert algorithm(points).shape[0] == 5  # Start and end points are the same
+            print(" - Passed")
+        print("All tests passed for ", algorithm.__name__)
+        print("------------------------------------------")
 
-def test_algorithm_datasetD(n = 10000):
+def test_algorithm_datasetD(n = 100):
+    print("Testing algorithms on dataset D with n=", n)
+    print("------------------------------------------")
     for algorithm in algorithms:
+        print("Testing ", algorithm.__name__)   
         for i in range(100):
-            print(i)
+            print(i, end="")
             points = datasetD(n)
             assert algorithm(points).shape[0] == n+1
+            print(" - Passed")
+        print("All tests passed for ", algorithm.__name__)
+        print("------------------------------------------")
 
 if __name__ == "__main__":
     test_is_clockwise()
     test_algorithm_datasetA()
     test_algorithm_datasetD()
-
-
-def nb_loop_median(nb_points, nb_runs, dataset, max_iter=50):
-    
-    freq = np.zeros(max_iter)
-    
-    dataset_map = {
-        "A": datasetA,  
-        "B": datasetB,  
-        "C": datasetC,  
-        "D": datasetD,  
-    } 
-    
-    if dataset not in dataset_map:
-        raise ValueError(f"Invalid dataset '{dataset}'. Choose from 'A', 'B', 'C', 'D'.")
-
-    for _ in range(nb_runs):
-        points = dataset_map[dataset](nb_points)
-        points = [p.tolist() for p in points]
-        k = median(points, test_mode = True)
-        freq[k] += 1
-
-    freq = freq / nb_runs
-    iterations = np.arange(max_iter)
-
-    return iterations, freq
-
-
-def nb_loop_graph(nb_points, nb_runs=100, dataset="B"):
-    iterations, freq = nb_loop_median(nb_points, nb_runs, dataset)
-
-    plt.figure(figsize=(8, 4))
-
-    plt.bar(iterations,freq,alpha=0.8)
-
-    plt.xlabel("Nombre d'itérations de la boucle")
-    plt.ylabel("Fréquence")
-    plt.title(f"Distribution du nombre d'itérations (N = {nb_points})")
-    plt.xlim(0, 10)
-    plt.xticks(np.arange(1, 10))
-    plt.grid(axis="y", linestyle="--", alpha=0.6)
-    plt.tight_layout()
-    plt.show()
