@@ -10,6 +10,16 @@ from quick_hull import quick_hull_algorithm
 
 
 def execution_time(algorithm, points):
+    '''
+    Returns the execution time of convex_hull algorithm when given the set of points 'points'
+
+    Args:
+        algorithm (function): the algorith used for the convex hull
+
+    Returns:
+        (float): execution time
+        (int): number of points in the convex hull
+    '''
     start = time.process_time()
     h = len(algorithm(points)) - 1
     end = time.process_time()
@@ -18,6 +28,14 @@ def execution_time(algorithm, points):
 
 
 def execution_time_comparison(dataset = "B", gift_wrapping = False, quick_hull = False):
+    '''
+    Create a graph representing time comparison as a function of number of points. 
+    The graph also displays theoric complexity.
+
+    Args:
+        gift_wrapping (bool): shows the statistics of gift wrapping algorithm when True
+        quick_hull (bool): shows the statistics of guick hull algorithm when True
+    '''
     N = np.linspace(1000,10000,10, dtype=int)
     
     dataset_map = {
@@ -51,7 +69,7 @@ def execution_time_comparison(dataset = "B", gift_wrapping = False, quick_hull =
     Y=[N[i]*np.log(h[i]) for i in range(len(N))]    #O(nlog(h))
     Z=[N[i]*h[i] for i in range(len(N))]            #O(nh)
 
-    C1 = np.polyfit(X, t1, 1)[0]
+    C1 = np.polyfit(X, t1, 1)[0]                    #Linear regressions to find time constants
     t1_th = [C1*n*np.log(n) for n in N]
 
     C2 = np.polyfit(Y, t2, 1)[0]
@@ -79,18 +97,21 @@ def execution_time_comparison(dataset = "B", gift_wrapping = False, quick_hull =
         plt.plot(N, t4, label = "Quick Hull Algorithm", color = 'orange', marker='o')
         plt.plot(N, t4_th, '--', label = "O(nlog(n))", color='orange', alpha=0.4)
 
-
-    #plt.plot(N, N*np.log(N)*t1[0]/20000, color = "grey")
     plt.xlabel("Number of points")
     plt.ylabel("Execution time (seconds)")
     plt.legend()
     plt.title("Execution Time Comparison (Dataset "+ dataset+ ")")
     plt.tight_layout()
-    plt.savefig("results/all_time_comparison_"+dataset+".png")
     plt.show()
 
 
 def hull_comparison(n, dataset="A"):
+    '''
+    Shows the hull calculated by the diffrent algorithms
+
+    Args:
+        n (int): number of points
+    '''
     dataset_map = {
         "A": datasetA,  
         "B": datasetB,  
@@ -114,7 +135,6 @@ def hull_comparison(n, dataset="A"):
 
             ax[i][j].scatter(points[:, 0], points[:, 1], color='blue')
             ax[i][j].set_aspect("equal")
-    
 
     ax[0][0].plot(hull1[:, 0], hull1[:, 1], color='red')
     ax[0][1].plot(hull2[:, 0], hull2[:, 1], color='red') 
@@ -132,7 +152,13 @@ def hull_comparison(n, dataset="A"):
 
 
 def nb_recursive_call_median(nb_points, nb_runs, dataset, max_iter=50):
-    
+    '''
+    Calculate the numbuer of recursive call of the find function when calling the median function
+
+    Returns:
+        (np.array): numbers of iteration [1,2,3,4, ...]
+        (np.array): coresponding frequency
+    '''
     freq = np.zeros(max_iter)
     
     dataset_map = {
@@ -158,9 +184,12 @@ def nb_recursive_call_median(nb_points, nb_runs, dataset, max_iter=50):
 
 
 def nb_recursive_call_graph1(nb_points, nb_runs=100, dataset="B"):
+    '''
+    Crealtes a bar graph of the number of recursive call of the find functon for 'nb_run' runs
+    '''
     iterations, freq = nb_recursive_call_median(nb_points, nb_runs, dataset)
 
-    plt.figure(figsize=(8, 4))
+    #plt.figure(figsize=(8, 4))
 
     plt.bar(iterations,freq,alpha=0.8)
 
@@ -175,6 +204,9 @@ def nb_recursive_call_graph1(nb_points, nb_runs=100, dataset="B"):
 
 
 def nb_recursive_call_graph2(nb_runs=10, dataset="B"):
+    '''
+    Creates a graph of the avreage number of recursive calls as function of the number of points
+    '''
     nb_points = [100,1000,10000,100000,1000000]
     nb_call = []
     for n in nb_points :

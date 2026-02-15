@@ -16,8 +16,11 @@ The code is divided into multiple files as follows :
 - `datasets.py`: function definitions for datasets A, B, C and D, along with a visualization function
 - `utils.py`: contains functions that are called frequently, like the hull visualization function
 - `tests.py`: contains test for our different methods and algorithms
+- `comparison.py`: contains functions for comparing diffrent algorithms
 - other files each contains the implementation of the algorithm specified by the file name.
 
 ## Dependencies
 - `numpy`: used to generate points at random and store arrays
 - `matplotlib`: used for visualization and video generation
+- `time`: used to measure and compare execution time of algorithm
+- `random`: used to shuffle lists of points

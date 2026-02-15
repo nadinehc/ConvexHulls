@@ -13,8 +13,8 @@ Elsa :
 - [x] fixer le pivot dans la fonction médiane
 - [x] partie 4
 - [x] graphiques de comparaison des performances (ajouter optionnellemnt gift_wraping et quick_hull)
-- [ ] rajouter la complexité théorique
-- [ ] graphique évolution appels récursifs en fonction du nombre de points
+- [x] rajouter la complexité théorique
+- [x] graphique évolution appels récursifs en fonction du nombre de points
 - [x] graphique du nombre de tour de boucles de find pour calculer la médiane (permet de justifier la complexité linéaire en moyenne)
 Tu peux utiliser la fonction `visualize_hull` dans `utils.py` pour représenter le polygone et le dataset
 

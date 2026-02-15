@@ -4,14 +4,9 @@ from datasets import datasetA, datasetB, datasetC, datasetD
 from kirkpatrick_seidel import find_line, median
 
 def image():
-    """
-    visualizes the convex hull for one of the datasets A, B, C, D
-
-    Args:
-        dataset (str, optional): dataset to visualize. Defaults to "A". Possible values are "A", "B", "C", "D".
-    """
-    
-    
+    '''
+    Generates an image for the report
+    '''
     points = datasetB(50)
     P = [point.tolist() for point in points]
     m = median(P)
@@ -43,6 +38,6 @@ def image():
 
     hull = [p1,p2]
     hull = np.array(hull)
-    
+
     ax.plot(hull[:, 0], hull[:, 1], color='red')
     plt.show()
